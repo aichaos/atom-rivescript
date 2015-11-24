@@ -1,0 +1,16 @@
+{
+  "name": "language-rivescript",
+  "version": "0.0.0",
+  "author": "Noah Petherbridge <root@kirsle.net>",
+  "description": "Syntax highlighting for the RiveScript chatbot scripting language.",
+  "keywords": [
+    "rivescript"
+  ],
+  "repository": "https://github.com/aichaos/atom-rivescript",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+  }
+}

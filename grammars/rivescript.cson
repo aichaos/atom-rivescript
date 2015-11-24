@@ -1,0 +1,274 @@
+name: "RiveScript"
+scopeName: "text.rivescript"
+fileTypes: [
+  "rive"
+]
+patterns: [
+  {
+    include: "#comments"
+  }
+  {
+    include: "#defines"
+  }
+  {
+    include: "#labels"
+  }
+  {
+    include: "#triggers"
+  }
+  {
+    include: "#replies"
+  }
+  {
+    include: "#conditions"
+  }
+]
+repository:
+
+  ###
+  # Constants and global metacharacters
+  ###
+
+  characters:
+    patterns: [
+      {
+        match: "(\\,|\\;|=|\\|)"
+        name: "keyword.control"
+      }
+    ]
+  comments:
+    patterns: [
+      {
+        match: "//.*$"
+        name: "comment.line.double-slash"
+      }
+      {
+        begin: "/\\*"
+        end: "\\*/"
+        name: "comment.block"
+      }
+    ]
+  constants:
+    patterns: [
+      {
+        match: "\\d+"
+        name: "constant.numeric"
+      }
+      {
+        match: "([A-Za-z0-9_]*)"
+        name: "constant.character"
+      }
+      {
+        match: "(\\')(.*)(\\')"
+        name: "string.quoted.single"
+      }
+    ]
+
+  ###
+  # Tags
+  ###
+
+  tags:
+    patterns: [
+      {
+        match: "(\\<|\\{)(/?[A-Za-z0-9_]+)(.*?)(\\>|\\})"
+        captures:
+          "1":
+            name: "variable.parameter"
+          "2":
+            name: "string.quoted"
+          "3":
+            name: "variable.parameter"
+          "4":
+            name: "variable.parameter"
+        name: "meta.tag"
+      }
+      {
+        match: "(<|>)"
+        captures:
+          "1":
+            name: "variable.parameter"
+      }
+    ]
+
+  ###
+  # !Definitions
+  ###
+
+  defines:
+    patterns: [
+      {
+        begin: "^(\\s*\\!\\s(?:version|global|var|sub|person|array))"
+        beginCaptures:
+          "1":
+            name: "keyword.other"
+        contentName: "string.unquoted"
+        end: "$"
+        name: "meta.define"
+        patterns: [
+          {
+            include: "#comments"
+          }
+          {
+            include: "#characters"
+          }
+        ]
+      }
+    ]
+
+  ###
+  # >Labels
+  ###
+
+  labels:
+    patterns: [
+      {
+        match: "(\\s*[<>]\\s+begin)"
+        captures:
+          "1":
+            name: "variable.parameter"
+      }
+      {
+        match: "(\\s*[<>]\\s+topic\\s*)([A-Za-z0-9\\-_ ]*)"
+        captures:
+          "1":
+            name: "variable.parameter"
+          "2":
+            name: "string.unquoted"
+      }
+      {
+        match: "(\\s*[<>]\\s+object\\s+)(A-Za-z0-9\\-_]+)?(\\s+[A-Za-z0-9\\-_]+)?"
+        captures:
+          "1":
+            name: "variable.parameter"
+          "2":
+            name: "string.unquoted"
+          "3":
+            name: "variable.parameter"
+      }
+    ]
+
+  ###
+  # +Triggers
+  ###
+
+  triggers:
+    patterns: [
+      {
+        begin: "^(\\s*[\\+%@]\\s)"
+        beginCaptures:
+          "1":
+            name: "keyword.other"
+        contentName: "string.unquoted"
+        end: "$"
+        name: "meta.trigger"
+        patterns: [
+          {
+            include: "#comments"
+          }
+          {
+            include: "#alternates"
+          }
+          {
+            include: "#optionals"
+          }
+        ]
+      }
+    ]
+  alternates:
+    patterns: [
+      {
+        begin: "(\\s\\()([A-Za-z0-9\\s\\-]*)(\\|)"
+        beginCaptures:
+          "1":
+            name: "keyword.control"
+          "2":
+            name: "string.unquoted"
+          "3":
+            name: "keyword.control"
+        contentName: "string.unquoted"
+        end: "(\\))"
+        endCaptures:
+          "1":
+            name: "keyword.control"
+        name: "meta.alternates"
+        patterns: [
+          {
+            include: "#characters"
+          }
+        ]
+      }
+    ]
+  optionals:
+    patterns: [
+      {
+        match: "(\\s\\[)([A-Za-z0-9\\s\\-]*)(\\])"
+        captures:
+          "1":
+            name: "keyword.control"
+          "2":
+            name: "string.unquoted"
+          "3":
+            name: "keyword.control"
+        contentName: "constant.language"
+        name: "meta.optionals"
+      }
+    ]
+
+  ###
+  # -Replies
+  ###
+
+  replies:
+    patterns: [
+      {
+        begin: "^(\\s*[\\-\\^\\@]\\s)"
+        beginCaptures:
+          "1":
+            name: "keyword.other"
+        contentName: "markup.raw"
+        end: "$"
+        name: "meta.reply"
+        patterns: [
+          {
+            include: "#tags"
+          }
+          {
+            include: "#comments"
+          }
+        ]
+      }
+    ]
+
+  ###
+  # *Conditions
+  ###
+
+  conditions:
+    patterns: [
+      {
+        begin: "^(\\s*\\*\\s)(.+)(\\s+(?:eq|ne|==|<>|<=|>=|<|>)\\s+)(.+)(=>)"
+        beginCaptures:
+          "1":
+            name: "keyword.other"
+          "2":
+            name: "string.unquoted"
+          "3":
+            name: "keyword.other"
+          "4":
+            name: "string.unquoted"
+          "5":
+            name: "keyword.other"
+        contentName: "markup.raw"
+        end: "$"
+        name: "meta.condition"
+        patterns: [
+          {
+            include: "#tags"
+          }
+          {
+            include: "#comments"
+          }
+        ]
+      }
+    ]
