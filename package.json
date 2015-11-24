@@ -1,6 +1,6 @@
 {
   "name": "language-rivescript",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "Noah Petherbridge <root@kirsle.net>",
   "description": "Syntax highlighting for the RiveScript chatbot scripting language.",
   "keywords": [
@@ -11,6 +11,5 @@
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
